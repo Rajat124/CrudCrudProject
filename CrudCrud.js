@@ -20,26 +20,7 @@ myform.addEventListener("submit", (e) => {
   if (name1 == "" || uemail == "" || phone == "") {
     alert("Please Enter All");
   } else {
-    var li = document.createElement("li");
-    li.appendChild(
-      document.createTextNode(name1 + " | " + uemail + " | " + phone)
-    );
-
-    /// delete button
-
-    var delbtn = document.createElement("button");
-    delbtn.className = "btn btn-danger btn-sm float-right delete";
-    delbtn.appendChild(document.createTextNode("Delete"));
-    li.appendChild(delbtn);
-
-    /// edit button
-
-    var editbtn = document.createElement("button");
-    editbtn.className = "btn btn-dark btn-sm float-right edit";
-    editbtn.appendChild(document.createTextNode("Edit"));
-    li.appendChild(editbtn);
-
-    itemlist.appendChild(li);
+    showOnScreen(name1, uemail, phone);
 
     let obj = {
       name: name1,
@@ -50,25 +31,75 @@ myform.addEventListener("submit", (e) => {
 
     axios
       .post(
-        "https://crudcrud.com/api/a1601bf0bd6940edb956a9f021b0229a/appointmentData",
+        "https://crudcrud.com/api/60caf387c1184879b5c9c17b3a8f6aec/appointmentData",
         obj
       )
       .then((res) => {
-        da(res.data);
+        // da(res.data);
         // document.body.innerHTML = document.body.innerHTML + `${JSON.stringify(res.data)}`;
-        console.log(res);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
 
-    function da(e) {
-      var data = document.createElement("li");
-      data.appendChild(document.createTextNode(`${JSON.stringify(e)}`));
-      li.appendChild(data);
-    }
+    // function da(user) {
+    //   var datali = document.createElement("li");
+    //   datali.appendChild(document.createTextNode(JSON.stringify(user)));
+    //   itemlist.appendChild(datali);
+    // }
   }
 });
+
+window.addEventListener("DOMContentLoaded", () => {
+  axios
+    .get(
+      "https://crudcrud.com/api/60caf387c1184879b5c9c17b3a8f6aec/appointmentData"
+    )
+    .then((res) => {
+      console.log(res);
+      for (let i = 0; i < res.data.length; i++) {
+        showOnScreen(res.data[i].name, res.data[i].email, res.data[i].phone);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  // const localStorageObj = localStorage;
+  // const localStorageObjkeys = Object.keys(localStorageObj);
+
+  // for (let i = 0; i < localStorageObjkeys.length; i++) {
+  //   const key = localStorageObjkeys[i];
+  //   const userDetailsString = localStorageObj[key];
+  //   const userObj = JSON.parse(userDetailsString);
+  //   console.log(userObj);
+  //   showOnScreen(userObj.name, userObj.email, userObj.phone);
+  // }
+});
+
+function showOnScreen(name1, uemail, phone) {
+  var li = document.createElement("li");
+  li.appendChild(
+    document.createTextNode(name1 + " | " + uemail + " | " + phone)
+  );
+
+  /// delete button
+
+  var delbtn = document.createElement("button");
+  delbtn.className = "btn btn-danger btn-sm float-right delete";
+  delbtn.appendChild(document.createTextNode("Delete"));
+  li.appendChild(delbtn);
+
+  /// edit button
+
+  var editbtn = document.createElement("button");
+  editbtn.className = "btn btn-dark btn-sm float-right edit";
+  editbtn.appendChild(document.createTextNode("Edit"));
+  li.appendChild(editbtn);
+
+  itemlist.appendChild(li);
+}
 
 itemlist.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {

@@ -31,7 +31,7 @@ myform.addEventListener("submit", (e) => {
 
     axios
       .post(
-        "https://crudcrud.com/api/60caf387c1184879b5c9c17b3a8f6aec/appointmentData",
+        "https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData",
         obj
       )
       .then((res) => {
@@ -48,7 +48,7 @@ myform.addEventListener("submit", (e) => {
 window.addEventListener("DOMContentLoaded", () => {
   axios
     .get(
-      "https://crudcrud.com/api/60caf387c1184879b5c9c17b3a8f6aec/appointmentData"
+      "https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData"
     )
     .then((res) => {
       console.log(res);
@@ -94,7 +94,7 @@ itemlist.addEventListener("click", (e) => {
 
       axios
         .get(
-          "https://crudcrud.com/api/60caf387c1184879b5c9c17b3a8f6aec/appointmentData"
+          "https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData"
         )
         .then((res) => {
           const itemToDelete = res.data.find(
@@ -105,7 +105,7 @@ itemlist.addEventListener("click", (e) => {
 
             axios
               .delete(
-                `https://crudcrud.com/api/60caf387c1184879b5c9c17b3a8f6aec/appointmentData/${itemId}`
+                `https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData/${itemId}`
               )
               .then((res) => {
                 console.log(res);
@@ -126,14 +126,62 @@ itemlist.addEventListener("click", (e) => {
 itemlist.addEventListener("click", (e) => {
   if (e.target.classList.contains("edit")) {
     var li = e.target.parentElement;
-    var namebox = document.getElementById("nameid");
-    var emailbox = document.getElementById("emailid");
-    var phonebox = document.getElementById("phoneid");
     var details = li.childNodes[0].textContent.split(" | ");
     localStorage.removeItem(details[1]);
-    namebox.value = details[0];
-    emailbox.value = details[1];
-    phonebox.value = details[2];
-    itemlist.removeChild(li);
+
+    axios
+      .get(
+        "https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData"
+      )
+      .then((res) => {
+        const itemToUpdate = res.data.find((item) => item.email === details[1]);
+        if (itemToUpdate) {
+          const itemId = itemToUpdate._id;
+
+          var namebox = document.getElementById("nameid");
+          var emailbox = document.getElementById("emailid");
+          var phonebox = document.getElementById("phoneid");
+
+          namebox.value = itemToUpdate.name;
+          emailbox.value = itemToUpdate.email;
+          phonebox.value = itemToUpdate.phone;
+
+          var updatebtn = document.createElement("button");
+          updatebtn.className = "btn btn-danger btn-sm float-right update";
+          updatebtn.appendChild(document.createTextNode("Update"));
+          li.appendChild(updatebtn);
+
+          updatebtn.addEventListener("click", (e) => {
+            var updatedName = namebox.value;
+            var updatedEmail = emailbox.value;
+            var updatedPhone = phonebox.value;
+
+            var updatedItem = {
+              name: updatedName,
+              email: updatedEmail,
+              phone: updatedPhone,
+            };
+
+            axios
+              .put(
+                `https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData/${itemId}`,
+                updatedItem
+              )
+              .then((res) => {
+                localStorage.setItem(updatedEmail, JSON.stringify(updatedItem));
+                li.childNodes[0].textContent = `${updatedName} | ${updatedEmail} | ${updatedPhone}`;
+                li.removeChild(updatebtn);
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
+  e.stopPropagation();
 });

@@ -42,12 +42,6 @@ myform.addEventListener("submit", (e) => {
       .catch((err) => {
         console.log(err);
       });
-
-    // function da(user) {
-    //   var datali = document.createElement("li");
-    //   datali.appendChild(document.createTextNode(JSON.stringify(user)));
-    //   itemlist.appendChild(datali);
-    // }
   }
 });
 
@@ -65,17 +59,6 @@ window.addEventListener("DOMContentLoaded", () => {
     .catch((err) => {
       console.log(err);
     });
-
-  // const localStorageObj = localStorage;
-  // const localStorageObjkeys = Object.keys(localStorageObj);
-
-  // for (let i = 0; i < localStorageObjkeys.length; i++) {
-  //   const key = localStorageObjkeys[i];
-  //   const userDetailsString = localStorageObj[key];
-  //   const userObj = JSON.parse(userDetailsString);
-  //   console.log(userObj);
-  //   showOnScreen(userObj.name, userObj.email, userObj.phone);
-  // }
 });
 
 function showOnScreen(name1, uemail, phone) {
@@ -108,6 +91,33 @@ itemlist.addEventListener("click", (e) => {
       var details = li.childNodes[0].textContent.split(" | ");
       localStorage.removeItem(details[1]);
       itemlist.removeChild(li);
+
+      axios
+        .get(
+          "https://crudcrud.com/api/60caf387c1184879b5c9c17b3a8f6aec/appointmentData"
+        )
+        .then((res) => {
+          const itemToDelete = res.data.find(
+            (item) => item.email === details[1]
+          );
+          if (itemToDelete) {
+            const itemId = itemToDelete._id;
+
+            axios
+              .delete(
+                `https://crudcrud.com/api/60caf387c1184879b5c9c17b3a8f6aec/appointmentData/${itemId}`
+              )
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }
   e.stopPropagation();

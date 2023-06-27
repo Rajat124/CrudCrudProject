@@ -31,7 +31,7 @@ myform.addEventListener("submit", (e) => {
 
     axios
       .post(
-        "https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData",
+        "https://crudcrud.com/api/45155744af414f21a14eae555408eed5/appointmentData",
         obj
       )
       .then((res) => {
@@ -48,7 +48,7 @@ myform.addEventListener("submit", (e) => {
 window.addEventListener("DOMContentLoaded", () => {
   axios
     .get(
-      "https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData"
+      "https://crudcrud.com/api/45155744af414f21a14eae555408eed5/appointmentData"
     )
     .then((res) => {
       console.log(res);
@@ -94,7 +94,7 @@ itemlist.addEventListener("click", (e) => {
 
       axios
         .get(
-          "https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData"
+          "https://crudcrud.com/api/45155744af414f21a14eae555408eed5/appointmentData"
         )
         .then((res) => {
           const itemToDelete = res.data.find(
@@ -105,7 +105,7 @@ itemlist.addEventListener("click", (e) => {
 
             axios
               .delete(
-                `https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData/${itemId}`
+                `https://crudcrud.com/api/45155744af414f21a14eae555408eed5/appointmentData/${itemId}`
               )
               .then((res) => {
                 console.log(res);
@@ -131,7 +131,7 @@ itemlist.addEventListener("click", (e) => {
 
     axios
       .get(
-        "https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData"
+        "https://crudcrud.com/api/45155744af414f21a14eae555408eed5/appointmentData"
       )
       .then((res) => {
         const itemToUpdate = res.data.find((item) => item.email === details[1]);
@@ -164,7 +164,7 @@ itemlist.addEventListener("click", (e) => {
 
             axios
               .put(
-                `https://crudcrud.com/api/55da6e729d114e33b954b30927c7e4e9/appointmentData/${itemId}`,
+                `https://crudcrud.com/api/45155744af414f21a14eae555408eed5/appointmentData/${itemId}`,
                 updatedItem
               )
               .then((res) => {
